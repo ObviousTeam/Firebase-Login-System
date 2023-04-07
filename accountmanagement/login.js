@@ -55,7 +55,7 @@ exports.loginpost = (req, res) => {
 		return signInPromise
 			.then((userCredential) => {
 				console.log(`Logged in user ${userCredential.user.uid}`);
-                exports.accountdetails = userCredential.user
+                export const accountdetails = userCredential.user
 				return userCredential.user;
 			})
 			.catch((error) => {

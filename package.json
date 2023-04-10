@@ -1,0 +1,34 @@
+{
+  "name": "nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "imports": {
+    "#create": "./accountmanagement/create.js",
+    "#login": "./accountmanagement/login.js",
+    "#recover": "./accountmanagement/recover.js",
+    "#logout": "./accountmanagement/logout.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^18.0.6",
+    "body-parser": "^1.20.2",
+    "crypto": "^1.0.1",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "firebase": "^9.19.1",
+    "firebase-admin": "^11.6.0",
+    "fs": "^0.0.1-security",
+    "node-fetch": "^3.2.6",
+    "nodemailer": "^6.9.1",
+    "path": "^0.12.7",
+    "prepend": "^1.0.2",
+    "sanitize-html": "^2.10.0",
+    "validator": "^13.9.0"
+  }
+}

@@ -1,5 +1,6 @@
 const admin = require('firebase-admin');
 const prepend = require('prepend');
+const nodemailer = require('nodemailer');
 
 const auth = admin.auth();
 

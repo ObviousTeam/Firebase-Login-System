@@ -55,7 +55,7 @@ exports.createpost = (req, res) => {
 		return res.status(400).send('Invalid password format');
 	}
 
-	if (email != "" && !validator.isEmail(email)) {
+	if (!validator.isEmail(email)) {
 		return res.status(400).send('Invalid email format');
 	}
 

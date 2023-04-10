@@ -1,17 +1,10 @@
-const admin = require('firebase-admin');
 const validator = require('validator');
+const firebase = require("firebase/app");
+const admin = require('firebase-admin');
 const prepend = require('prepend');
 const sanitizeHtml = require('sanitize-html');
 
 const auth = admin.auth();
-
-const transporter = nodemailer.createTransport({
-	service: process.env['nodemailer_service'],
-	auth: {
-		user: process.env['nodemailer_username'],
-		pass: process.env['nodemailer_password']
-	}
-});
 
 exports.loginget = (req, res) => {
 	const path = require('path');
@@ -36,40 +29,29 @@ exports.loginpost = (req, res) => {
 		return res.status(400).send('Invalid password format');
 	}
 
-	function login(usernameOrEmail, password) {
-		// Determine whether the input is a username or email
-		let signInPromise;
-		if (usernameOrEmail.includes('@')) {
-			if (!validator.isEmail(usernameOrEmail)) {
-				return res.status(400).send('Invalid password format');
-			}
-			signInPromise = auth.signInWithEmailAndPassword(usernameOrEmail, password);
-		} else {
-			if (!validator.isAlphanumeric(usernameOrEmail)) {
-				return res.status(400).send('Invalid usernname format');
-			}
-			signInPromise = auth.signInWithUsernameAndPassword(usernameOrEmail, password);
-		}
+function login(usernameOrEmail, password) {
+  // Determine whether the input is a username or email
+  let signInPromise;
+  if (usernameOrEmail.includes('@')) {
+    signInPromise = auth.signInWithCredential(firebase.auth.EmailAuthProvider.credential(usernameOrEmail, password));
+  } else {
+    signInPromise = auth.signInWithCredential(firebase.auth.UsernameAuthProvider.credential(usernameOrEmail, password));
+  }
 
-		// Sign in the user with the appropriate method
-		return signInPromise
-			.then((userCredential) => {
-				console.log(`Logged in user ${userCredential.user.uid}`);
-                export const accountdetails = userCredential.user
-				return userCredential.user;
-			})
-			.catch((error) => {
-				prepend('errors/login.txt', err, function(error) {
-					if (error)
-						console.error(error);
-				});
-				throw error;
-			});
-	}
-//continuse
+  return signInPromise
+    .then((userCredential) => {
+      console.log(`Logged in user ${userCredential.user.uid}`);
+      return userCredential.user;
+    })
+    .catch((error) => {
+      console.error('Error logging in:', error);
+      throw error;
+    });
+}
+
 
 	login(usernameoremail, password)
-		.then(() => {
+		.then((user) => {
 			console.log("logged in successfully")
 		})
 		.catch(err => {
@@ -78,6 +60,6 @@ exports.loginpost = (req, res) => {
 				if (error)
 					console.error(error);
 			});
-			res.status(500).send('Error logging in:'+err);
+			res.status(500).send('Error logging in:' + err);
 		});
 }
